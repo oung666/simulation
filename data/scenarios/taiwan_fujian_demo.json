@@ -1,0 +1,65 @@
+{
+  "name": "Taiwan-Fujian Demo Scenario",
+  "units": [
+    {
+      "id": "blue-ship-01",
+      "name": "蓝方舰艇-01",
+      "side": "blue",
+      "type": "ship",
+      "route_id": "blue_01",
+      "motion": "route_loop",
+      "range_nm": 3.5,
+      "speed": 1.0
+    },
+    {
+      "id": "blue-ship-02",
+      "name": "蓝方舰艇-02",
+      "side": "blue",
+      "type": "ship",
+      "route_id": "blue_02",
+      "motion": "route_pingpong",
+      "range_nm": 3.5,
+      "speed": 0.8
+    },
+    {
+      "id": "red-air-01",
+      "name": "红方航空-01",
+      "side": "red",
+      "type": "aircraft",
+      "route_id": "red_01",
+      "motion": "route_loop",
+      "range_nm": 5.5,
+      "speed": 1.15
+    },
+    {
+      "id": "red-air-02",
+      "name": "红方航空-02",
+      "side": "red",
+      "type": "aircraft",
+      "route_id": "red_02",
+      "motion": "route_once",
+      "range_nm": 5.5,
+      "speed": 0.95
+    },
+    {
+      "id": "blue-airbase-01",
+      "name": "蓝方机场",
+      "side": "blue",
+      "type": "airbase",
+      "motion": "stationary",
+      "position": [121.20, 24.70],
+      "range_nm": 3.0,
+      "speed": 0.0
+    },
+    {
+      "id": "red-radar-01",
+      "name": "红方雷达",
+      "side": "red",
+      "type": "facility",
+      "motion": "stationary",
+      "position": [119.30, 26.08],
+      "range_nm": 4.5,
+      "speed": 0.0
+    }
+  ]
+}
