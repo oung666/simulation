@@ -1,0 +1,58 @@
+{
+  "name": "Taiwan-Fujian Demo Scenario",
+  "start_time": 0.0,
+  "duration": 14400.0,
+  "time_compression": 1,
+  "missions": [
+    {
+      "id": "blue-cap-north",
+      "name": "Blue North Patrol",
+      "type": "patrol",
+      "active": true,
+      "assigned_unit_ids": [
+        "blue-air-01"
+      ],
+      "assigned_area": [
+        [
+          120.8,
+          21.35
+        ],
+        [
+          122.0,
+          21.4
+        ],
+        [
+          122.05,
+          22.2
+        ],
+        [
+          120.85,
+          22.15
+        ]
+      ]
+    },
+    {
+      "id": "red-strike-blue-ship",
+      "name": "Red Strike Blue Ship",
+      "type": "strike",
+      "active": true,
+      "assigned_unit_ids": [
+        "red-air-02"
+      ],
+      "assigned_target_ids": [
+        "blue-ship-01"
+      ]
+    }
+  ],
+  "unit_files": [
+    "units/blue-ship-01.json",
+    "units/blue-ship-02.json",
+    "units/blue-air-01.json",
+    "units/red-air-01.json",
+    "units/red-air-02.json",
+    "units/blue-airbase-01.json",
+    "units/red-radar-01.json",
+    "units/blue-himars-01.json",
+    "units/red-df16-tel-01.json"
+  ]
+}

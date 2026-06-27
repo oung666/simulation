@@ -1,0 +1,253 @@
+{
+  "name": "Taiwan-Fujian Demo Scenario",
+  "units": [
+    {
+      "id": "blue-ship-01",
+      "name": "蓝方舰艇-01",
+      "side": "blue",
+      "type": "ship",
+      "route_id": "blue_01",
+      "motion": "route_loop",
+      "range_nm": 3.5,
+      "speed": 30,
+      "detection_range_nm": 70,
+      "weapons": [
+        {
+          "weapon_class": "HN-3",
+          "name": "鹰击反舰导弹",
+          "speed": 600,
+          "range_nm": 80,
+          "lethality": 0.6,
+          "max_quantity": 4,
+          "current_quantity": 4
+        }
+      ]
+    },
+    {
+      "id": "blue-ship-02",
+      "name": "蓝方舰艇-02",
+      "side": "blue",
+      "type": "ship",
+      "route_id": "blue_02",
+      "motion": "route_pingpong",
+      "range_nm": 3.5,
+      "speed": 25,
+      "detection_range_nm": 65,
+      "weapons": [
+        {
+          "weapon_class": "HHQ-16",
+          "name": "海红旗-16",
+          "speed": 2400,
+          "range_nm": 45,
+          "lethality": 0.55,
+          "max_quantity": 6,
+          "current_quantity": 6
+        }
+      ]
+    },
+    {
+      "id": "blue-air-01",
+      "name": "Blue CAP-01",
+      "side": "blue",
+      "type": "aircraft",
+      "motion": "stationary",
+      "position": [
+        121.2,
+        21.8
+      ],
+      "range_nm": 5.5,
+      "speed": 470,
+      "detection_range_nm": 55,
+      "weapons": [
+        {
+          "weapon_class": "AIM-120",
+          "name": "AIM-120 AMRAAM",
+          "speed": 2600,
+          "range_nm": 65,
+          "lethality": 0.65,
+          "max_quantity": 4,
+          "current_quantity": 4
+        }
+      ]
+    },
+    {
+      "id": "red-air-01",
+      "name": "红方航空-01",
+      "side": "red",
+      "type": "aircraft",
+      "route_id": "red_01",
+      "motion": "route_loop",
+      "range_nm": 5.5,
+      "speed": 500,
+      "detection_range_nm": 100,
+      "weapons": [
+        {
+          "weapon_class": "PL-15",
+          "name": "霹雳-15",
+          "speed": 3000,
+          "range_nm": 100,
+          "lethality": 0.7,
+          "max_quantity": 4,
+          "current_quantity": 4
+        },
+        {
+          "weapon_class": "PL-10",
+          "name": "霹雳-10",
+          "speed": 2000,
+          "range_nm": 20,
+          "lethality": 0.85,
+          "max_quantity": 2,
+          "current_quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "red-air-02",
+      "name": "红方航空-02",
+      "side": "red",
+      "type": "aircraft",
+      "route_id": "red_02",
+      "motion": "route_once",
+      "range_nm": 5.5,
+      "speed": 480,
+      "detection_range_nm": 95,
+      "weapons": [
+        {
+          "weapon_class": "PL-12",
+          "name": "霹雳-12",
+          "speed": 2500,
+          "range_nm": 55,
+          "lethality": 0.62,
+          "max_quantity": 4,
+          "current_quantity": 4
+        }
+      ]
+    },
+    {
+      "id": "blue-airbase-01",
+      "name": "蓝方机场",
+      "side": "blue",
+      "type": "airbase",
+      "motion": "stationary",
+      "position": [
+        121.2,
+        24.7
+      ],
+      "range_nm": 3.0,
+      "speed": 0.0,
+      "detection_range_nm": 120
+    },
+    {
+      "id": "red-radar-01",
+      "name": "红方雷达",
+      "side": "red",
+      "type": "facility",
+      "motion": "stationary",
+      "position": [
+        119.3,
+        26.08
+      ],
+      "range_nm": 4.5,
+      "speed": 0.0,
+      "detection_range_nm": 200,
+      "weapons": [
+        {
+          "weapon_class": "HQ-9",
+          "name": "红旗-9",
+          "speed": 3000,
+          "range_nm": 120,
+          "lethality": 0.75,
+          "max_quantity": 16,
+          "current_quantity": 16
+        }
+      ]
+    },
+    {
+      "id": "blue-himars-01",
+      "name": "Blue HIMARS-01",
+      "side": "blue",
+      "type": "ground_vehicle",
+      "class_name": "HIMARS",
+      "motion": "stationary",
+      "position": [
+        120.96,
+        24.76
+      ],
+      "weapons": [
+        {
+          "weapon_class": "GMLRS",
+          "name": "GMLRS",
+          "max_quantity": 6,
+          "current_quantity": 6
+        },
+        {
+          "weapon_class": "ATACMS",
+          "name": "ATACMS",
+          "max_quantity": 1,
+          "current_quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "red-df16-tel-01",
+      "name": "Red DF-16 TEL-01",
+      "side": "red",
+      "type": "ground_vehicle",
+      "class_name": "DF-16 TEL",
+      "motion": "stationary",
+      "position": [
+        119.31,
+        26.02
+      ],
+      "weapons": [
+        {
+          "weapon_class": "DF-16",
+          "name": "DF-16",
+          "max_quantity": 2,
+          "current_quantity": 2
+        }
+      ]
+    }
+  ],
+  "missions": [
+    {
+      "id": "blue-cap-north",
+      "name": "Blue North Patrol",
+      "type": "patrol",
+      "active": true,
+      "assigned_unit_ids": [
+        "blue-air-01"
+      ],
+      "assigned_area": [
+        [
+          120.8,
+          21.35
+        ],
+        [
+          122.0,
+          21.4
+        ],
+        [
+          122.05,
+          22.2
+        ],
+        [
+          120.85,
+          22.15
+        ]
+      ]
+    },
+    {
+      "id": "red-strike-blue-ship",
+      "name": "Red Strike Blue Ship",
+      "type": "strike",
+      "active": true,
+      "assigned_unit_ids": [
+        "red-air-02"
+      ],
+      "assigned_target_ids": [
+        "blue-ship-01"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "red-radar-01",
+  "name": "红方雷达阵地",
+  "side": "red",
+  "type": "facility",
+  "motion": "stationary",
+  "altitude_ft": 0.0,
+  "range_nm": 4.5,
+  "speed": 0.0,
+  "detection_range_nm": 200.0,
+  "heading": 0.0,
+  "current_fuel": 10000.0,
+  "max_fuel": 10000.0,
+  "fuel_rate": 1.0,
+  "alive": true,
+  "radar_on": true,
+  "rcs": 5.0,
+  "jammer_power": 0.15,
+  "jammer_range_nm": 30.0,
+  "ew_resistance": 0.25,
+  "comms_on": true,
+  "comms_range_nm": 180.0,
+  "datalink": true,
+  "command_node": true,
+  "comms_power": 1.1,
+  "comms_resistance": 0.3,
+  "contact_share_delay_s": 1.0,
+  "class_name": "HQ-9",
+  "position": [
+    119.3,
+    26.08
+  ],
+  "weapons": [
+    {
+      "weapon_class": "HQ-9",
+      "name": "红旗-9",
+      "speed": 3000.0,
+      "range_nm": 120.0,
+      "lethality": 0.75,
+      "max_quantity": 16,
+      "current_quantity": 16
+    }
+  ]
+}

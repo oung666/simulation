@@ -1,0 +1,45 @@
+{
+  "id": "red-air-02",
+  "name": "红方飞机-02",
+  "side": "red",
+  "type": "aircraft",
+  "motion": "route_once",
+  "altitude_ft": 30000.0,
+  "range_nm": 5.5,
+  "speed": 480.0,
+  "detection_range_nm": 95.0,
+  "heading": 0.0,
+  "current_fuel": 18498.0,
+  "max_fuel": 18498.0,
+  "fuel_rate": 1000.0,
+  "alive": true,
+  "radar_on": true,
+  "rcs": 1.0,
+  "jammer_power": 0.0,
+  "jammer_range_nm": 0.0,
+  "ew_resistance": 0.15,
+  "comms_on": true,
+  "comms_range_nm": 120.0,
+  "datalink": true,
+  "command_node": false,
+  "comms_power": 1.0,
+  "comms_resistance": 0.15,
+  "contact_share_delay_s": 2.0,
+  "class_name": "F-35A Lightning II",
+  "route_id": "red_02",
+  "position": [
+    119.65,
+    26.1
+  ],
+  "weapons": [
+    {
+      "weapon_class": "PL-12",
+      "name": "霹雳-12",
+      "speed": 2500.0,
+      "range_nm": 55.0,
+      "lethality": 0.62,
+      "max_quantity": 4,
+      "current_quantity": 4
+    }
+  ]
+}

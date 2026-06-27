@@ -1,0 +1,45 @@
+{
+  "id": "blue-ship-02",
+  "name": "蓝方舰艇-02",
+  "side": "blue",
+  "type": "ship",
+  "motion": "route_pingpong",
+  "altitude_ft": 0.0,
+  "range_nm": 3.5,
+  "speed": 25.0,
+  "detection_range_nm": 65.0,
+  "heading": 0.0,
+  "current_fuel": 3500000.0,
+  "max_fuel": 3500000.0,
+  "fuel_rate": 100000.0,
+  "alive": true,
+  "radar_on": true,
+  "rcs": 8.0,
+  "jammer_power": 0.2,
+  "jammer_range_nm": 40.0,
+  "ew_resistance": 0.2,
+  "comms_on": true,
+  "comms_range_nm": 220.0,
+  "datalink": true,
+  "command_node": true,
+  "comms_power": 1.2,
+  "comms_resistance": 0.25,
+  "contact_share_delay_s": 1.0,
+  "class_name": "Destroyer",
+  "route_id": "blue_02",
+  "position": [
+    118.9,
+    21.0
+  ],
+  "weapons": [
+    {
+      "weapon_class": "HHQ-16",
+      "name": "海红旗-16",
+      "speed": 2400.0,
+      "range_nm": 45.0,
+      "lethality": 0.55,
+      "max_quantity": 6,
+      "current_quantity": 6
+    }
+  ]
+}

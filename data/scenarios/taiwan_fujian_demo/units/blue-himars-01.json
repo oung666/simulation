@@ -1,0 +1,53 @@
+{
+  "id": "blue-himars-01",
+  "name": "Blue HIMARS-01",
+  "side": "blue",
+  "type": "ground_vehicle",
+  "motion": "stationary",
+  "altitude_ft": 0.0,
+  "range_nm": 2.0,
+  "speed": 45.0,
+  "detection_range_nm": 15.0,
+  "heading": 0.0,
+  "current_fuel": 10000.0,
+  "max_fuel": 10000.0,
+  "fuel_rate": 1.0,
+  "alive": true,
+  "radar_on": false,
+  "rcs": 2.0,
+  "jammer_power": 0.0,
+  "jammer_range_nm": 0.0,
+  "ew_resistance": 0.1,
+  "comms_on": true,
+  "comms_range_nm": 90.0,
+  "datalink": true,
+  "command_node": false,
+  "comms_power": 1.0,
+  "comms_resistance": 0.15,
+  "contact_share_delay_s": 2.0,
+  "class_name": "HIMARS",
+  "position": [
+    120.96,
+    24.76
+  ],
+  "weapons": [
+    {
+      "weapon_class": "GMLRS",
+      "name": "GMLRS",
+      "speed": 1800.0,
+      "range_nm": 43.0,
+      "lethality": 0.7,
+      "max_quantity": 6,
+      "current_quantity": 6
+    },
+    {
+      "weapon_class": "ATACMS",
+      "name": "ATACMS",
+      "speed": 3000.0,
+      "range_nm": 160.0,
+      "lethality": 0.82,
+      "max_quantity": 1,
+      "current_quantity": 1
+    }
+  ]
+}

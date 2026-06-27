@@ -1,0 +1,44 @@
+{
+  "id": "blue-air-01",
+  "name": "蓝方巡逻机-01",
+  "side": "blue",
+  "type": "aircraft",
+  "motion": "stationary",
+  "altitude_ft": 28000.0,
+  "range_nm": 5.5,
+  "speed": 470.0,
+  "detection_range_nm": 55.0,
+  "heading": 0.0,
+  "current_fuel": 18498.0,
+  "max_fuel": 18498.0,
+  "fuel_rate": 1000.0,
+  "alive": true,
+  "radar_on": true,
+  "rcs": 1.0,
+  "jammer_power": 0.0,
+  "jammer_range_nm": 0.0,
+  "ew_resistance": 0.15,
+  "comms_on": true,
+  "comms_range_nm": 120.0,
+  "datalink": true,
+  "command_node": false,
+  "comms_power": 1.0,
+  "comms_resistance": 0.15,
+  "contact_share_delay_s": 2.0,
+  "class_name": "F-35A Lightning II",
+  "position": [
+    121.2,
+    21.8
+  ],
+  "weapons": [
+    {
+      "weapon_class": "AIM-120",
+      "name": "AIM-120 AMRAAM",
+      "speed": 2600.0,
+      "range_nm": 65.0,
+      "lethality": 0.65,
+      "max_quantity": 4,
+      "current_quantity": 4
+    }
+  ]
+}

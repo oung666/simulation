@@ -1,0 +1,45 @@
+{
+  "id": "blue-ship-01",
+  "name": "蓝方舰艇-01",
+  "side": "blue",
+  "type": "ship",
+  "motion": "route_loop",
+  "altitude_ft": 0.0,
+  "range_nm": 3.5,
+  "speed": 30.0,
+  "detection_range_nm": 70.0,
+  "heading": 0.0,
+  "current_fuel": 3500000.0,
+  "max_fuel": 3500000.0,
+  "fuel_rate": 100000.0,
+  "alive": true,
+  "radar_on": true,
+  "rcs": 8.0,
+  "jammer_power": 0.2,
+  "jammer_range_nm": 40.0,
+  "ew_resistance": 0.2,
+  "comms_on": true,
+  "comms_range_nm": 220.0,
+  "datalink": true,
+  "command_node": true,
+  "comms_power": 1.2,
+  "comms_resistance": 0.25,
+  "contact_share_delay_s": 1.0,
+  "class_name": "Destroyer",
+  "route_id": "blue_01",
+  "position": [
+    119.45,
+    23.85
+  ],
+  "weapons": [
+    {
+      "weapon_class": "HN-3",
+      "name": "鹰击-3",
+      "speed": 600.0,
+      "range_nm": 80.0,
+      "lethality": 0.6,
+      "max_quantity": 4,
+      "current_quantity": 4
+    }
+  ]
+}
