@@ -1,0 +1,1226 @@
+{
+  "replay_id": "replay-20260704-112424-384327",
+  "scenario_name": "Taiwan-Fujian Demo Scenario",
+  "started_at": "2026-07-04T11:24:24",
+  "ended_at": "2026-07-04T11:24:27",
+  "settlement_reason": "manual_settlement",
+  "duration_seconds": 2.0,
+  "tick_interval_seconds": 1.0,
+  "snapshot_interval_seconds": 2.5,
+  "participants": [],
+  "initial_state": {
+    "units": [
+      {
+        "unit_id": "blue-ship-01",
+        "name": "蓝方舰艇-01",
+        "side": "blue",
+        "unit_type": "ship",
+        "class_name": "Destroyer",
+        "alive": false,
+        "position": {
+          "lon": 119.47206710831335,
+          "lat": 23.772931941994294
+        },
+        "heading": 165.32509471668163,
+        "speed": 30.0,
+        "target_id": "red-air-02",
+        "range_nm": 3.5,
+        "detection_range_nm": 70.0,
+        "radar_on": true,
+        "jammer_power": 0.2,
+        "jammer_range_nm": 40.0,
+        "comms_on": true,
+        "comms_range_nm": 220.0,
+        "comms_power": 1.2,
+        "comms_resistance": 0.25,
+        "current_fuel": 3500000.0,
+        "motion": "route_loop",
+        "route_id": "blue_01",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "HN-3",
+            "name": "鹰击-3",
+            "current_quantity": 2,
+            "max_quantity": 4
+          }
+        ]
+      },
+      {
+        "unit_id": "blue-ship-02",
+        "name": "蓝方舰艇-02",
+        "side": "blue",
+        "unit_type": "ship",
+        "class_name": "Destroyer",
+        "alive": true,
+        "position": {
+          "lon": 119.01193749529057,
+          "lat": 21.018826237997338
+        },
+        "heading": 79.80705164935523,
+        "speed": 25.0,
+        "target_id": "",
+        "range_nm": 3.5,
+        "detection_range_nm": 65.0,
+        "radar_on": true,
+        "jammer_power": 0.2,
+        "jammer_range_nm": 40.0,
+        "comms_on": true,
+        "comms_range_nm": 220.0,
+        "comms_power": 1.2,
+        "comms_resistance": 0.25,
+        "current_fuel": 3500000.0,
+        "motion": "route_pingpong",
+        "route_id": "blue_02",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "HHQ-16",
+            "name": "海红旗-16",
+            "current_quantity": 6,
+            "max_quantity": 6
+          }
+        ]
+      },
+      {
+        "unit_id": "blue-air-01",
+        "name": "蓝方巡逻机-01",
+        "side": "blue",
+        "unit_type": "aircraft",
+        "class_name": "F-35A Lightning II",
+        "alive": true,
+        "position": {
+          "lon": 121.53705251786823,
+          "lat": 21.63552651453746
+        },
+        "heading": 13.93013882923077,
+        "speed": 470.0,
+        "target_id": "",
+        "range_nm": 5.5,
+        "detection_range_nm": 55.0,
+        "radar_on": true,
+        "jammer_power": 0.0,
+        "jammer_range_nm": 0.0,
+        "comms_on": true,
+        "comms_range_nm": 120.0,
+        "comms_power": 1.0,
+        "comms_resistance": 0.15,
+        "current_fuel": 18498.0,
+        "motion": "dynamic",
+        "route_id": "",
+        "route": [
+          {
+            "lon": 121.66111675672464,
+            "lat": 22.09892376703805
+          }
+        ],
+        "weapons": [
+          {
+            "weapon_class": "AIM-120",
+            "name": "AIM-120 AMRAAM",
+            "current_quantity": 4,
+            "max_quantity": 4
+          }
+        ]
+      },
+      {
+        "unit_id": "red-air-01",
+        "name": "红方飞机-01",
+        "side": "red",
+        "unit_type": "aircraft",
+        "class_name": "F-35A Lightning II",
+        "alive": true,
+        "position": {
+          "lon": 120.67791880539232,
+          "lat": 23.156138095885872
+        },
+        "heading": 204.58304380264943,
+        "speed": 500.0,
+        "target_id": "blue-ship-01",
+        "range_nm": 5.5,
+        "detection_range_nm": 100.0,
+        "radar_on": true,
+        "jammer_power": 0.0,
+        "jammer_range_nm": 0.0,
+        "comms_on": true,
+        "comms_range_nm": 120.0,
+        "comms_power": 1.0,
+        "comms_resistance": 0.15,
+        "current_fuel": 18498.0,
+        "motion": "route_loop",
+        "route_id": "red_01",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "PL-15",
+            "name": "霹雳-15",
+            "current_quantity": 1,
+            "max_quantity": 4
+          },
+          {
+            "weapon_class": "PL-10",
+            "name": "霹雳-10",
+            "current_quantity": 2,
+            "max_quantity": 2
+          }
+        ]
+      },
+      {
+        "unit_id": "red-air-02",
+        "name": "红方飞机-02",
+        "side": "red",
+        "unit_type": "aircraft",
+        "class_name": "F-35A Lightning II",
+        "alive": false,
+        "position": {
+          "lon": 119.52628838912676,
+          "lat": 24.550000444619588
+        },
+        "heading": 183.6540031335139,
+        "speed": 480.0,
+        "target_id": "blue-ship-01",
+        "range_nm": 5.5,
+        "detection_range_nm": 95.0,
+        "radar_on": true,
+        "jammer_power": 0.0,
+        "jammer_range_nm": 0.0,
+        "comms_on": true,
+        "comms_range_nm": 120.0,
+        "comms_power": 1.0,
+        "comms_resistance": 0.15,
+        "current_fuel": 18498.0,
+        "motion": "dynamic",
+        "route_id": "",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "PL-12",
+            "name": "霹雳-12",
+            "current_quantity": 4,
+            "max_quantity": 4
+          }
+        ]
+      },
+      {
+        "unit_id": "blue-airbase-01",
+        "name": "蓝方机场",
+        "side": "blue",
+        "unit_type": "airbase",
+        "class_name": "蓝方机场",
+        "alive": true,
+        "position": {
+          "lon": 121.2,
+          "lat": 24.7
+        },
+        "heading": 0.0,
+        "speed": 0.0,
+        "target_id": "",
+        "range_nm": 3.0,
+        "detection_range_nm": 120.0,
+        "radar_on": false,
+        "jammer_power": 0.0,
+        "jammer_range_nm": 0.0,
+        "comms_on": true,
+        "comms_range_nm": 260.0,
+        "comms_power": 1.3,
+        "comms_resistance": 0.35,
+        "current_fuel": 10000.0,
+        "motion": "stationary",
+        "route_id": "",
+        "route": [],
+        "weapons": []
+      },
+      {
+        "unit_id": "red-radar-01",
+        "name": "红方雷达阵地",
+        "side": "red",
+        "unit_type": "facility",
+        "class_name": "HQ-9",
+        "alive": true,
+        "position": {
+          "lon": 119.3,
+          "lat": 26.08
+        },
+        "heading": 0.0,
+        "speed": 0.0,
+        "target_id": "blue-himars-01",
+        "range_nm": 4.5,
+        "detection_range_nm": 200.0,
+        "radar_on": true,
+        "jammer_power": 0.15,
+        "jammer_range_nm": 30.0,
+        "comms_on": true,
+        "comms_range_nm": 180.0,
+        "comms_power": 1.1,
+        "comms_resistance": 0.3,
+        "current_fuel": 10000.0,
+        "motion": "stationary",
+        "route_id": "",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "HQ-9",
+            "name": "红旗-9",
+            "current_quantity": 15,
+            "max_quantity": 16
+          }
+        ]
+      },
+      {
+        "unit_id": "blue-himars-01",
+        "name": "Blue HIMARS-01",
+        "side": "blue",
+        "unit_type": "ground_vehicle",
+        "class_name": "HIMARS",
+        "alive": false,
+        "position": {
+          "lon": 120.96,
+          "lat": 24.76
+        },
+        "heading": 0.0,
+        "speed": 45.0,
+        "target_id": "",
+        "range_nm": 2.0,
+        "detection_range_nm": 15.0,
+        "radar_on": false,
+        "jammer_power": 0.0,
+        "jammer_range_nm": 0.0,
+        "comms_on": true,
+        "comms_range_nm": 90.0,
+        "comms_power": 1.0,
+        "comms_resistance": 0.15,
+        "current_fuel": 10000.0,
+        "motion": "stationary",
+        "route_id": "",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "GMLRS",
+            "name": "GMLRS",
+            "current_quantity": 6,
+            "max_quantity": 6
+          },
+          {
+            "weapon_class": "ATACMS",
+            "name": "ATACMS",
+            "current_quantity": 1,
+            "max_quantity": 1
+          }
+        ]
+      },
+      {
+        "unit_id": "red-df16-tel-01",
+        "name": "Red DF-16 TEL-01",
+        "side": "red",
+        "unit_type": "ground_vehicle",
+        "class_name": "DF-16 TEL",
+        "alive": true,
+        "position": {
+          "lon": 119.31,
+          "lat": 26.02
+        },
+        "heading": 0.0,
+        "speed": 35.0,
+        "target_id": "",
+        "range_nm": 2.0,
+        "detection_range_nm": 20.0,
+        "radar_on": false,
+        "jammer_power": 0.0,
+        "jammer_range_nm": 0.0,
+        "comms_on": true,
+        "comms_range_nm": 120.0,
+        "comms_power": 1.1,
+        "comms_resistance": 0.2,
+        "current_fuel": 10000.0,
+        "motion": "stationary",
+        "route_id": "",
+        "route": [],
+        "weapons": [
+          {
+            "weapon_class": "DF-16",
+            "name": "DF-16",
+            "current_quantity": 2,
+            "max_quantity": 2
+          }
+        ]
+      }
+    ],
+    "flying_weapons": [],
+    "missions": [
+      {
+        "mission_id": "blue-cap-north",
+        "name": "Blue North Patrol",
+        "mission_type": "patrol",
+        "active": true,
+        "assigned_unit_ids": [
+          "blue-air-01"
+        ],
+        "assigned_area": [
+          {
+            "reference_id": "3f38cf97-5a3a-4787-9c2c-9e33542bd110",
+            "name": "Area Point 1",
+            "position": {
+              "lon": 120.8,
+              "lat": 21.35
+            }
+          },
+          {
+            "reference_id": "287dcc16-19ba-475f-9759-04dd12265676",
+            "name": "Area Point 2",
+            "position": {
+              "lon": 122.0,
+              "lat": 21.4
+            }
+          },
+          {
+            "reference_id": "09948e63-fccc-4761-ad8a-0c994514b7b7",
+            "name": "Area Point 3",
+            "position": {
+              "lon": 122.05,
+              "lat": 22.2
+            }
+          },
+          {
+            "reference_id": "26ab76f9-8022-47f2-8e64-a89b8f0ec219",
+            "name": "Area Point 4",
+            "position": {
+              "lon": 120.85,
+              "lat": 22.15
+            }
+          }
+        ]
+      }
+    ],
+    "contacts": [
+      {
+        "side": "red",
+        "target_id": "blue-airbase-01",
+        "last_known_position": {
+          "lon": 121.2,
+          "lat": 24.7
+        },
+        "last_detected_time": 918.0,
+        "source_unit_id": "red-radar-01",
+        "confidence": 1.0,
+        "track_type": "local",
+        "shared": true
+      }
+    ]
+  },
+  "snapshots": [
+    {
+      "time": 0.0,
+      "clock_state": {
+        "current_time": 0.0
+      },
+      "unit_states": [
+        {
+          "unit_id": "blue-ship-01",
+          "name": "蓝方舰艇-01",
+          "side": "blue",
+          "unit_type": "ship",
+          "class_name": "Destroyer",
+          "alive": false,
+          "position": {
+            "lon": 119.47206710831335,
+            "lat": 23.772931941994294
+          },
+          "heading": 165.32509471668163,
+          "speed": 30.0,
+          "target_id": "red-air-02",
+          "range_nm": 3.5,
+          "detection_range_nm": 70.0,
+          "radar_on": true,
+          "jammer_power": 0.2,
+          "jammer_range_nm": 40.0,
+          "comms_on": true,
+          "comms_range_nm": 220.0,
+          "comms_power": 1.2,
+          "comms_resistance": 0.25,
+          "current_fuel": 3500000.0,
+          "motion": "route_loop",
+          "route_id": "blue_01",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "HN-3",
+              "name": "鹰击-3",
+              "current_quantity": 2,
+              "max_quantity": 4
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-ship-02",
+          "name": "蓝方舰艇-02",
+          "side": "blue",
+          "unit_type": "ship",
+          "class_name": "Destroyer",
+          "alive": true,
+          "position": {
+            "lon": 119.01193749529057,
+            "lat": 21.018826237997338
+          },
+          "heading": 79.80705164935523,
+          "speed": 25.0,
+          "target_id": "",
+          "range_nm": 3.5,
+          "detection_range_nm": 65.0,
+          "radar_on": true,
+          "jammer_power": 0.2,
+          "jammer_range_nm": 40.0,
+          "comms_on": true,
+          "comms_range_nm": 220.0,
+          "comms_power": 1.2,
+          "comms_resistance": 0.25,
+          "current_fuel": 3500000.0,
+          "motion": "route_pingpong",
+          "route_id": "blue_02",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "HHQ-16",
+              "name": "海红旗-16",
+              "current_quantity": 6,
+              "max_quantity": 6
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-air-01",
+          "name": "蓝方巡逻机-01",
+          "side": "blue",
+          "unit_type": "aircraft",
+          "class_name": "F-35A Lightning II",
+          "alive": true,
+          "position": {
+            "lon": 121.53705251786823,
+            "lat": 21.63552651453746
+          },
+          "heading": 13.93013882923077,
+          "speed": 470.0,
+          "target_id": "",
+          "range_nm": 5.5,
+          "detection_range_nm": 55.0,
+          "radar_on": true,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 18498.0,
+          "motion": "dynamic",
+          "route_id": "",
+          "route": [
+            {
+              "lon": 121.66111675672464,
+              "lat": 22.09892376703805
+            }
+          ],
+          "weapons": [
+            {
+              "weapon_class": "AIM-120",
+              "name": "AIM-120 AMRAAM",
+              "current_quantity": 4,
+              "max_quantity": 4
+            }
+          ]
+        },
+        {
+          "unit_id": "red-air-01",
+          "name": "红方飞机-01",
+          "side": "red",
+          "unit_type": "aircraft",
+          "class_name": "F-35A Lightning II",
+          "alive": true,
+          "position": {
+            "lon": 120.67791880539232,
+            "lat": 23.156138095885872
+          },
+          "heading": 204.58304380264943,
+          "speed": 500.0,
+          "target_id": "blue-ship-01",
+          "range_nm": 5.5,
+          "detection_range_nm": 100.0,
+          "radar_on": true,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 18498.0,
+          "motion": "route_loop",
+          "route_id": "red_01",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "PL-15",
+              "name": "霹雳-15",
+              "current_quantity": 1,
+              "max_quantity": 4
+            },
+            {
+              "weapon_class": "PL-10",
+              "name": "霹雳-10",
+              "current_quantity": 2,
+              "max_quantity": 2
+            }
+          ]
+        },
+        {
+          "unit_id": "red-air-02",
+          "name": "红方飞机-02",
+          "side": "red",
+          "unit_type": "aircraft",
+          "class_name": "F-35A Lightning II",
+          "alive": false,
+          "position": {
+            "lon": 119.52628838912676,
+            "lat": 24.550000444619588
+          },
+          "heading": 183.6540031335139,
+          "speed": 480.0,
+          "target_id": "blue-ship-01",
+          "range_nm": 5.5,
+          "detection_range_nm": 95.0,
+          "radar_on": true,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 18498.0,
+          "motion": "dynamic",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "PL-12",
+              "name": "霹雳-12",
+              "current_quantity": 4,
+              "max_quantity": 4
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-airbase-01",
+          "name": "蓝方机场",
+          "side": "blue",
+          "unit_type": "airbase",
+          "class_name": "蓝方机场",
+          "alive": true,
+          "position": {
+            "lon": 121.2,
+            "lat": 24.7
+          },
+          "heading": 0.0,
+          "speed": 0.0,
+          "target_id": "",
+          "range_nm": 3.0,
+          "detection_range_nm": 120.0,
+          "radar_on": false,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 260.0,
+          "comms_power": 1.3,
+          "comms_resistance": 0.35,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": []
+        },
+        {
+          "unit_id": "red-radar-01",
+          "name": "红方雷达阵地",
+          "side": "red",
+          "unit_type": "facility",
+          "class_name": "HQ-9",
+          "alive": true,
+          "position": {
+            "lon": 119.3,
+            "lat": 26.08
+          },
+          "heading": 0.0,
+          "speed": 0.0,
+          "target_id": "blue-himars-01",
+          "range_nm": 4.5,
+          "detection_range_nm": 200.0,
+          "radar_on": true,
+          "jammer_power": 0.15,
+          "jammer_range_nm": 30.0,
+          "comms_on": true,
+          "comms_range_nm": 180.0,
+          "comms_power": 1.1,
+          "comms_resistance": 0.3,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "HQ-9",
+              "name": "红旗-9",
+              "current_quantity": 15,
+              "max_quantity": 16
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-himars-01",
+          "name": "Blue HIMARS-01",
+          "side": "blue",
+          "unit_type": "ground_vehicle",
+          "class_name": "HIMARS",
+          "alive": false,
+          "position": {
+            "lon": 120.96,
+            "lat": 24.76
+          },
+          "heading": 0.0,
+          "speed": 45.0,
+          "target_id": "",
+          "range_nm": 2.0,
+          "detection_range_nm": 15.0,
+          "radar_on": false,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 90.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "GMLRS",
+              "name": "GMLRS",
+              "current_quantity": 6,
+              "max_quantity": 6
+            },
+            {
+              "weapon_class": "ATACMS",
+              "name": "ATACMS",
+              "current_quantity": 1,
+              "max_quantity": 1
+            }
+          ]
+        },
+        {
+          "unit_id": "red-df16-tel-01",
+          "name": "Red DF-16 TEL-01",
+          "side": "red",
+          "unit_type": "ground_vehicle",
+          "class_name": "DF-16 TEL",
+          "alive": true,
+          "position": {
+            "lon": 119.31,
+            "lat": 26.02
+          },
+          "heading": 0.0,
+          "speed": 35.0,
+          "target_id": "",
+          "range_nm": 2.0,
+          "detection_range_nm": 20.0,
+          "radar_on": false,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.1,
+          "comms_resistance": 0.2,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "DF-16",
+              "name": "DF-16",
+              "current_quantity": 2,
+              "max_quantity": 2
+            }
+          ]
+        }
+      ],
+      "flying_weapon_states": [],
+      "mission_states": [
+        {
+          "mission_id": "blue-cap-north",
+          "name": "Blue North Patrol",
+          "mission_type": "patrol",
+          "active": true,
+          "assigned_unit_ids": [
+            "blue-air-01"
+          ],
+          "assigned_area": [
+            {
+              "reference_id": "3f38cf97-5a3a-4787-9c2c-9e33542bd110",
+              "name": "Area Point 1",
+              "position": {
+                "lon": 120.8,
+                "lat": 21.35
+              }
+            },
+            {
+              "reference_id": "287dcc16-19ba-475f-9759-04dd12265676",
+              "name": "Area Point 2",
+              "position": {
+                "lon": 122.0,
+                "lat": 21.4
+              }
+            },
+            {
+              "reference_id": "09948e63-fccc-4761-ad8a-0c994514b7b7",
+              "name": "Area Point 3",
+              "position": {
+                "lon": 122.05,
+                "lat": 22.2
+              }
+            },
+            {
+              "reference_id": "26ab76f9-8022-47f2-8e64-a89b8f0ec219",
+              "name": "Area Point 4",
+              "position": {
+                "lon": 120.85,
+                "lat": 22.15
+              }
+            }
+          ]
+        }
+      ],
+      "contact_track_states": [
+        {
+          "side": "red",
+          "target_id": "blue-airbase-01",
+          "last_known_position": {
+            "lon": 121.2,
+            "lat": 24.7
+          },
+          "last_detected_time": 918.0,
+          "source_unit_id": "red-radar-01",
+          "confidence": 1.0,
+          "track_type": "local",
+          "shared": true
+        }
+      ]
+    },
+    {
+      "time": 2.0,
+      "clock_state": {
+        "current_time": 2.0
+      },
+      "unit_states": [
+        {
+          "unit_id": "blue-ship-01",
+          "name": "蓝方舰艇-01",
+          "side": "blue",
+          "unit_type": "ship",
+          "class_name": "Destroyer",
+          "alive": false,
+          "position": {
+            "lon": 119.47206710831335,
+            "lat": 23.772931941994294
+          },
+          "heading": 165.32509471668163,
+          "speed": 30.0,
+          "target_id": "red-air-02",
+          "range_nm": 3.5,
+          "detection_range_nm": 70.0,
+          "radar_on": true,
+          "jammer_power": 0.2,
+          "jammer_range_nm": 40.0,
+          "comms_on": true,
+          "comms_range_nm": 220.0,
+          "comms_power": 1.2,
+          "comms_resistance": 0.25,
+          "current_fuel": 3500000.0,
+          "motion": "route_loop",
+          "route_id": "blue_01",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "HN-3",
+              "name": "鹰击-3",
+              "current_quantity": 2,
+              "max_quantity": 4
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-ship-02",
+          "name": "蓝方舰艇-02",
+          "side": "blue",
+          "unit_type": "ship",
+          "class_name": "Destroyer",
+          "alive": true,
+          "position": {
+            "lon": 119.01218139865739,
+            "lat": 21.018867173845532
+          },
+          "heading": 79.80713913248513,
+          "speed": 25.0,
+          "target_id": "",
+          "range_nm": 3.5,
+          "detection_range_nm": 65.0,
+          "radar_on": true,
+          "jammer_power": 0.2,
+          "jammer_range_nm": 40.0,
+          "comms_on": true,
+          "comms_range_nm": 220.0,
+          "comms_power": 1.2,
+          "comms_resistance": 0.25,
+          "current_fuel": 3500000.0,
+          "motion": "route_pingpong",
+          "route_id": "blue_02",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "HHQ-16",
+              "name": "海红旗-16",
+              "current_quantity": 6,
+              "max_quantity": 6
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-air-01",
+          "name": "蓝方巡逻机-01",
+          "side": "blue",
+          "unit_type": "aircraft",
+          "class_name": "F-35A Lightning II",
+          "alive": true,
+          "position": {
+            "lon": 121.53817887038724,
+            "lat": 21.639747524587527
+          },
+          "heading": 13.93055410347091,
+          "speed": 470.0,
+          "target_id": "",
+          "range_nm": 5.5,
+          "detection_range_nm": 55.0,
+          "radar_on": true,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 18498.0,
+          "motion": "dynamic",
+          "route_id": "",
+          "route": [
+            {
+              "lon": 121.66111675672464,
+              "lat": 22.09892376703805
+            }
+          ],
+          "weapons": [
+            {
+              "weapon_class": "AIM-120",
+              "name": "AIM-120 AMRAAM",
+              "current_quantity": 4,
+              "max_quantity": 4
+            }
+          ]
+        },
+        {
+          "unit_id": "red-air-01",
+          "name": "红方飞机-01",
+          "side": "red",
+          "unit_type": "aircraft",
+          "class_name": "F-35A Lightning II",
+          "alive": true,
+          "position": {
+            "lon": 120.6758255762162,
+            "lat": 23.151930908470717
+          },
+          "heading": 204.58222063873293,
+          "speed": 500.0,
+          "target_id": "blue-ship-01",
+          "range_nm": 5.5,
+          "detection_range_nm": 100.0,
+          "radar_on": true,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 18498.0,
+          "motion": "route_loop",
+          "route_id": "red_01",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "PL-15",
+              "name": "霹雳-15",
+              "current_quantity": 1,
+              "max_quantity": 4
+            },
+            {
+              "weapon_class": "PL-10",
+              "name": "霹雳-10",
+              "current_quantity": 2,
+              "max_quantity": 2
+            }
+          ]
+        },
+        {
+          "unit_id": "red-air-02",
+          "name": "红方飞机-02",
+          "side": "red",
+          "unit_type": "aircraft",
+          "class_name": "F-35A Lightning II",
+          "alive": false,
+          "position": {
+            "lon": 119.52628838912676,
+            "lat": 24.550000444619588
+          },
+          "heading": 183.6540031335139,
+          "speed": 480.0,
+          "target_id": "blue-ship-01",
+          "range_nm": 5.5,
+          "detection_range_nm": 95.0,
+          "radar_on": true,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 18498.0,
+          "motion": "dynamic",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "PL-12",
+              "name": "霹雳-12",
+              "current_quantity": 4,
+              "max_quantity": 4
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-airbase-01",
+          "name": "蓝方机场",
+          "side": "blue",
+          "unit_type": "airbase",
+          "class_name": "蓝方机场",
+          "alive": true,
+          "position": {
+            "lon": 121.2,
+            "lat": 24.7
+          },
+          "heading": 0.0,
+          "speed": 0.0,
+          "target_id": "",
+          "range_nm": 3.0,
+          "detection_range_nm": 120.0,
+          "radar_on": false,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 260.0,
+          "comms_power": 1.3,
+          "comms_resistance": 0.35,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": []
+        },
+        {
+          "unit_id": "red-radar-01",
+          "name": "红方雷达阵地",
+          "side": "red",
+          "unit_type": "facility",
+          "class_name": "HQ-9",
+          "alive": true,
+          "position": {
+            "lon": 119.3,
+            "lat": 26.08
+          },
+          "heading": 0.0,
+          "speed": 0.0,
+          "target_id": "blue-himars-01",
+          "range_nm": 4.5,
+          "detection_range_nm": 200.0,
+          "radar_on": true,
+          "jammer_power": 0.15,
+          "jammer_range_nm": 30.0,
+          "comms_on": true,
+          "comms_range_nm": 180.0,
+          "comms_power": 1.1,
+          "comms_resistance": 0.3,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "HQ-9",
+              "name": "红旗-9",
+              "current_quantity": 15,
+              "max_quantity": 16
+            }
+          ]
+        },
+        {
+          "unit_id": "blue-himars-01",
+          "name": "Blue HIMARS-01",
+          "side": "blue",
+          "unit_type": "ground_vehicle",
+          "class_name": "HIMARS",
+          "alive": false,
+          "position": {
+            "lon": 120.96,
+            "lat": 24.76
+          },
+          "heading": 0.0,
+          "speed": 45.0,
+          "target_id": "",
+          "range_nm": 2.0,
+          "detection_range_nm": 15.0,
+          "radar_on": false,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 90.0,
+          "comms_power": 1.0,
+          "comms_resistance": 0.15,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "GMLRS",
+              "name": "GMLRS",
+              "current_quantity": 6,
+              "max_quantity": 6
+            },
+            {
+              "weapon_class": "ATACMS",
+              "name": "ATACMS",
+              "current_quantity": 1,
+              "max_quantity": 1
+            }
+          ]
+        },
+        {
+          "unit_id": "red-df16-tel-01",
+          "name": "Red DF-16 TEL-01",
+          "side": "red",
+          "unit_type": "ground_vehicle",
+          "class_name": "DF-16 TEL",
+          "alive": true,
+          "position": {
+            "lon": 119.31,
+            "lat": 26.02
+          },
+          "heading": 0.0,
+          "speed": 35.0,
+          "target_id": "",
+          "range_nm": 2.0,
+          "detection_range_nm": 20.0,
+          "radar_on": false,
+          "jammer_power": 0.0,
+          "jammer_range_nm": 0.0,
+          "comms_on": true,
+          "comms_range_nm": 120.0,
+          "comms_power": 1.1,
+          "comms_resistance": 0.2,
+          "current_fuel": 10000.0,
+          "motion": "stationary",
+          "route_id": "",
+          "route": [],
+          "weapons": [
+            {
+              "weapon_class": "DF-16",
+              "name": "DF-16",
+              "current_quantity": 2,
+              "max_quantity": 2
+            }
+          ]
+        }
+      ],
+      "flying_weapon_states": [],
+      "mission_states": [
+        {
+          "mission_id": "blue-cap-north",
+          "name": "Blue North Patrol",
+          "mission_type": "patrol",
+          "active": true,
+          "assigned_unit_ids": [
+            "blue-air-01"
+          ],
+          "assigned_area": [
+            {
+              "reference_id": "3f38cf97-5a3a-4787-9c2c-9e33542bd110",
+              "name": "Area Point 1",
+              "position": {
+                "lon": 120.8,
+                "lat": 21.35
+              }
+            },
+            {
+              "reference_id": "287dcc16-19ba-475f-9759-04dd12265676",
+              "name": "Area Point 2",
+              "position": {
+                "lon": 122.0,
+                "lat": 21.4
+              }
+            },
+            {
+              "reference_id": "09948e63-fccc-4761-ad8a-0c994514b7b7",
+              "name": "Area Point 3",
+              "position": {
+                "lon": 122.05,
+                "lat": 22.2
+              }
+            },
+            {
+              "reference_id": "26ab76f9-8022-47f2-8e64-a89b8f0ec219",
+              "name": "Area Point 4",
+              "position": {
+                "lon": 120.85,
+                "lat": 22.15
+              }
+            }
+          ]
+        }
+      ],
+      "contact_track_states": [
+        {
+          "side": "red",
+          "target_id": "blue-airbase-01",
+          "last_known_position": {
+            "lon": 121.2,
+            "lat": 24.7
+          },
+          "last_detected_time": 920.0,
+          "source_unit_id": "red-radar-01",
+          "confidence": 1.0,
+          "track_type": "local",
+          "shared": true
+        }
+      ]
+    }
+  ],
+  "event_stream": [],
+  "highlights": [],
+  "final_state": {
+    "alive": {
+      "blue": 3,
+      "red": 3
+    }
+  }
+}

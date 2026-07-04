@@ -1,22 +1,22 @@
 # Project Optimization Plan
 
-围绕当前纯 Qt 离线战术仿真原型做一轮工程化和体验优化：先修复影响演示观感的中文乱码和浮窗一致性，再逐步拆分 `main_window.py`、补强场景编辑与数据校验，最后提升探测/交战逻辑的可解释性。
+围绕当前纯 Qt 离线战术仿真原型做一轮工程化和体验优化：先修复影响演示观感的中文乱码和浮窗一致性，再逐步拆分 `main_window.py`、补强场景编辑与数据校验，最后提升探测、交战逻辑的可解释性。
 
 ## Scope
-- In: 中文编码清理、地图浮窗统一管理、控制面板模块化、场景/单位编辑能力、武器与平台数据库校验、战斗日志增强、探测交战解释性、基础验证流程。
+- In: 中文编码清理、地图浮窗统一管理、控制面板模块化、场景与单位编辑能力、武器与平台数据库校验、战斗日志增强、探测交战解释性、基础验证流程。
 - Out: 不更换 Qt 技术栈、不引入 Web 前端、不重写仿真引擎、不追求一次性完成全部真实军事模型、不改变现有 JSON 场景格式的向后兼容。
 
 ## Action Items
-[x] Audit all visible Chinese text in `data/scenarios/`, `ui/`, `core/db/`, and `docs/`; restore corrupted strings to UTF-8 and add a quick script or checklist to catch future mojibake.
-[x] Add an overlay coordination layer for `UnitInfoPopup`, `CombatLogOverlay`, and `ControlOverlay` to standardize z-order, positioning, minimize/restore markers, close behavior, and resize handling.
-[x] Split the first control-page responsibility out of `ui/main_window.py` into `ui/control_pages.py`, and register map info, display settings, JSON scene loading, route editing, mission viewing, and combat log actions through the page registry.
-[x] Extend the control overlay page registration API so new pages can be added with a title, icon, builder, preferred size, default placement, and optional restore marker behavior.
-[x] Build a scenario editing pass: add/save units, edit position/speed/fuel/radar/comms/weapons, duplicate units, delete units, and save the current scenario back to JSON safely.
-[x] Add database validation for `core/db/_weapons.py`, `_ships.py`, `_aircraft_cn.py`, `_ground_vehicles.py`, and related loaders to flag missing fields, duplicate classes, invalid ranges, and unit mismatches.
-[x] Improve combat log usability: filters by side/event type, click-to-focus related unit or event position, unread count while minimized, and concise event categories.
-[x] Add explainable detection/engagement details in the UI and logs: detection range used, distance, RCS/jamming modifiers, weapon selected, launch condition, hit probability, and result reason.
-[x] Add focused smoke tests or scripts for scenario loading, database validation, combat stepping, overlay creation, and core UI construction using Qt offscreen mode.
-[x] Create a manual QA checklist for release/demo runs: load default scenario, switch perspectives, open/close overlays, play/pause/step, trigger combat, reload JSON, and verify no text overlap or stale panels.
+- [x] Audit all visible Chinese text in `data/scenarios/`, `ui/`, `core/db/`, and `docs/`; restore corrupted strings to UTF-8 and add a quick script or checklist to catch future mojibake.
+- [x] Add an overlay coordination layer for `UnitInfoPopup`, `CombatLogOverlay`, and `ControlOverlay` to standardize z-order, positioning, minimize/restore markers, close behavior, and resize handling.
+- [x] Split the first control-page responsibility out of `ui/main_window.py` into `ui/control_pages.py`, and register map info, display settings, JSON scene loading, route editing, mission viewing, and combat log actions through the page registry.
+- [x] Extend the control overlay page registration API so new pages can be added with a title, icon, builder, preferred size, default placement, and optional restore marker behavior.
+- [x] Build a scenario editing pass: add/save units, edit position/speed/fuel/radar/comms/weapons, duplicate units, delete units, and save the current scenario back to JSON safely.
+- [x] Add database validation for `core/db/_weapons.py`, `_ships.py`, `_aircraft_cn.py`, `_ground_vehicles.py`, and related loaders to flag missing fields, duplicate classes, invalid ranges, and unit mismatches.
+- [x] Improve combat log usability: filters by side/event type, click-to-focus related unit or event position, unread count while minimized, and concise event categories.
+- [x] Add explainable detection/engagement details in the UI and logs: detection range used, distance, RCS/jamming modifiers, weapon selected, launch condition, hit probability, and result reason.
+- [x] Add focused smoke tests or scripts for scenario loading, database validation, combat stepping, overlay creation, and core UI construction using Qt offscreen mode.
+- [x] Create a manual QA checklist for release/demo runs: load default scenario, switch perspectives, open/close overlays, play/pause/step, trigger combat, reload JSON, and verify no text overlap or stale panels.
 
 ## Completed In This Pass
 - Added `save_scenario()` and JSON serializers in `core/scenario.py`, with atomic writes and support for both split-unit scenarios and single-file scenarios.
@@ -44,6 +44,9 @@
 - Moved unit creation out of the `JSON 场景` page into a standalone `新增单位` first-level control-menu page.
 - Added map-pick deployment placement for new units: the user can arm position picking from the `新增单位` page and set the default creation coordinate with a map click.
 - Replaced the dark inherited deployment warning with a light warning dialog so invalid land/sea placement messages remain readable.
+- Added replay recording, settlement, battle-report storage, and toolbar recording, settlement, and battle-report actions.
+- Added a dedicated battle-report dialog with side overview, unit details, replay entry, and two cleanup levels for report-only vs. report-plus-replay deletion.
+- Added a lightweight replay runtime and standalone replay viewer driven by snapshots plus event stream instead of the live simulation state.
 
 ## Verification
 - `python tools\validate_project.py`

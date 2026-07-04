@@ -107,6 +107,19 @@ def build_application_stylesheet() -> str:
         color: #1f56b3;
     }
 
+    QToolButton#ReplayToolButton,
+    QToolButton#ReplayRecordToolButton {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+    }
+
+    QToolButton#ReplayRecordToolButton:checked {
+        background: #dc2626;
+        border: 1px solid #b91c1c;
+        color: #ffffff;
+    }
+
     QToolButton#MessageToolButton {
         background: #e8f8ee;
         border: 1px solid #b8e7c7;

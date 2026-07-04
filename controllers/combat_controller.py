@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 from uuid import uuid4
 
@@ -43,6 +43,7 @@ class CombatEvent:
     weapon_class: str = ""
     message: str = ""
     position: LonLat | None = None
+    extra: dict[str, Any] = field(default_factory=dict)
 
 
 class CombatController:
@@ -56,6 +57,7 @@ class CombatController:
         self.contact_tracks: dict[str, dict[str, ContactTrack]] = {}
         self._shared_contact_keys: set[tuple[str, str, str]] = set()
         self._previous_positions: dict[str, LonLat] = {}
+        self._weapon_attackers: dict[str, tuple[str, str]] = {}
 
     def set_scenario(self, scenario: Scenario) -> None:
         self.scenario = scenario
@@ -64,6 +66,7 @@ class CombatController:
         self.contact_tracks.clear()
         self._shared_contact_keys.clear()
         self._previous_positions.clear()
+        self._weapon_attackers.clear()
         self.current_time = 0.0
 
     def step(self, units_positions: dict[str, LonLat], simulation_time: float = 0.0) -> None:
@@ -110,6 +113,7 @@ class CombatController:
             if result == "flying":
                 continue
             target_name = target.name if target else weapon.target_id
+            event_extra = self._weapon_event_extra(weapon)
             if result == "hit":
                 self._add_event(
                     "hit",
@@ -118,7 +122,19 @@ class CombatController:
                     weapon.weapon_class,
                     f"{weapon.name} 命中并摧毁 {target_name}（结算命中率 {hit_probability:.0%}）",
                     target.position if target else weapon.position,
+                    extra=event_extra,
                 )
+                if target is not None and not target.alive:
+                    self._add_event(
+                        "unit_destroyed",
+                        weapon.weapon_id,
+                        target.unit_id,
+                        weapon.weapon_class,
+                        f"{target.name} 宸茶鎽ф瘉",
+                        target.position,
+                        extra=event_extra,
+                    )
+                self._weapon_attackers.pop(weapon.weapon_id, None)
             elif result == "miss":
                 self._add_event(
                     "miss",
@@ -127,7 +143,9 @@ class CombatController:
                     weapon.weapon_class,
                     f"{weapon.name} 未命中 {target_name}（结算命中率 {hit_probability:.0%}）",
                     weapon.position,
+                    extra=event_extra,
                 )
+                self._weapon_attackers.pop(weapon.weapon_id, None)
             elif result == "expired":
                 self._add_event(
                     "expired",
@@ -136,7 +154,9 @@ class CombatController:
                     weapon.weapon_class,
                     f"{weapon.name} 燃料耗尽",
                     weapon.position,
+                    extra=event_extra,
                 )
+                self._weapon_attackers.pop(weapon.weapon_id, None)
             elif result == "lost_target":
                 self._add_event(
                     "lost_target",
@@ -145,7 +165,9 @@ class CombatController:
                     weapon.weapon_class,
                     f"{weapon.name} 丢失目标",
                     weapon.position,
+                    extra=event_extra,
                 )
+                self._weapon_attackers.pop(weapon.weapon_id, None)
 
     def refresh_mission_routes(self, units_positions: dict[str, LonLat], simulation_time: float = 0.0) -> None:
         """Recalculate mission-driven routes without advancing combat resolution."""
@@ -433,6 +455,8 @@ class CombatController:
         effective_range_nm = effective_detection_range_nm(shooter, target, self.scenario.units)
         hit_probability = max(0.0, min(1.0, float(getattr(weapon, "lethality", 0.0))))
         for flying_weapon in launched:
+            setattr(flying_weapon, "attacker_unit_id", shooter.unit_id)
+            self._weapon_attackers[flying_weapon.weapon_id] = (shooter.unit_id, shooter.side)
             self._add_event(
                 "launched",
                 shooter.unit_id,
@@ -631,6 +655,7 @@ class CombatController:
         weapon_class: str,
         message: str,
         position: LonLat | None = None,
+        extra: dict[str, Any] | None = None,
     ) -> None:
         self.combat_log.append(
             CombatEvent(
@@ -641,8 +666,33 @@ class CombatController:
                 weapon_class=weapon_class,
                 message=message,
                 position=position,
+                extra=dict(extra or {}),
             )
         )
+
+    def _weapon_event_extra(self, weapon) -> dict[str, Any]:
+        attacker_unit_id = str(getattr(weapon, "attacker_unit_id", "")).strip()
+        attacker_side = str(getattr(weapon, "side", ""))
+        if attacker_unit_id:
+            attacker = self._unit_by_id(attacker_unit_id)
+            if attacker is not None:
+                attacker_side = attacker.side
+        mapped = self._weapon_attackers.get(weapon.weapon_id)
+        if not attacker_unit_id and mapped is not None:
+            attacker_unit_id, attacker_side = mapped
+        elif not attacker_unit_id:
+            same_side_units = [unit for unit in self.scenario.units if unit.side == attacker_side]
+            targeting_units = [unit for unit in same_side_units if unit.target_id == weapon.target_id]
+            if len(targeting_units) == 1:
+                attacker_unit_id = targeting_units[0].unit_id
+                attacker_side = targeting_units[0].side
+            elif len(same_side_units) == 1:
+                attacker_unit_id = same_side_units[0].unit_id
+                attacker_side = same_side_units[0].side
+        extra = {"attacker_side": attacker_side}
+        if attacker_unit_id:
+            extra["attacker_unit_id"] = attacker_unit_id
+        return extra
 
     def _set_dynamic_route(self, unit: CombatUnit, points: list[LonLat]) -> None:
         unit.route = UnitRoute(points)

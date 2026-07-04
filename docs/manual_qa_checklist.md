@@ -48,3 +48,12 @@ Use this checklist before demos or larger UI changes.
 - [ ] Change combat log filters or minimize/maximize state, restart the app, and confirm preferences are restored.
 - [ ] Confirm destroyed units remain visible in damaged styling.
 - [ ] Confirm no floating panel text overlaps in a way that blocks core map use.
+
+## Replay And Battle Reports
+- [ ] 打开工具栏 `录制`，运行一小段仿真，然后手动点击 `结算`，确认会生成一条战绩。
+- [ ] 让仿真自然结束，确认也会自动生成一条战绩。
+- [ ] 点击工具栏 `战绩`，确认可以打开独立战绩对话框。
+- [ ] 在战绩对话框中选择一条记录，确认能看到结果、阵营总览和单位明细。
+- [ ] 点击 `查看回放`，确认可以打开独立回放查看器，并拖动时间轴查看状态。
+- [ ] 点击 `清除战绩记录`，确认仅删除战绩摘要，回放文件仍然保留。
+- [ ] 点击 `彻底删除战绩+回放`，确认战绩和对应回放文件都会消失。

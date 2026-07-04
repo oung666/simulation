@@ -2,6 +2,7 @@
 
 import json
 from copy import deepcopy
+from datetime import datetime
 
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtWidgets import (
@@ -36,17 +37,23 @@ from simulation.core.geo import ScreenPoint, lonlat_to_world, world_to_lonlat
 from simulation.core.layers import RouteLayerItem, load_layer_document, next_route_id, save_layer_document, upsert_route
 from simulation.core.map_document import load_map_document
 from simulation.core.mission import PatrolMission, StrikeMission
-from simulation.core.paths import get_default_layers_path, get_default_scenario_path, get_map_asset_path
+from simulation.core.paths import get_default_layers_path, get_default_scenario_path, get_map_asset_path, get_package_root
 from simulation.core.scenario import CombatUnit, UnitRoute, load_scenario, save_scenario
 from simulation.core.terrain import TerrainClassifier
 from simulation.core.weapon import WeaponTemplate
 from simulation.core.db import get_unit_attributes, get_weapon_attributes
+from simulation.replay.recorder import ReplayRecorder
+from simulation.replay.results import build_battle_report_summary
+from simulation.replay.storage import ReplayStorage
+from simulation.ui.battle_report_dialog import BattleReportDialog
 from simulation.ui.combat_log_overlay import CombatLogMarker, CombatLogOverlay
 from simulation.ui.control_overlay import ControlOverlay, ControlOverlayMarker, ControlPageWindow
 from simulation.ui.control_pages import register_main_control_pages
 from simulation.ui.map_canvas import MapCanvas
 from simulation.ui.new_unit_dialog import NewUnitDialog
 from simulation.ui.overlay_manager import OverlayManager
+from simulation.ui.recording_switch import RecordingSwitchButton
+from simulation.ui.replay_viewer_dialog import ReplayViewerDialog
 from simulation.ui.unit_info_popup import UnitInfoPopup
 
 
@@ -100,6 +107,20 @@ class MainWindow(QMainWindow):
         self.statusBar().addWidget(self.coordinate_label)
         self.statusBar().addPermanentWidget(self.alive_label)
         self.statusBar().addPermanentWidget(self.time_label)
+        replay_root = get_package_root() / "data"
+        self._replay_storage = ReplayStorage(
+            replay_root / "replays",
+            replay_root / "battle_reports",
+        )
+        self._replay_recorder = ReplayRecorder(snapshot_interval_seconds=2.5)
+        self._battle_reports_cache = self._replay_storage.list_reports()
+        self._recording_enabled = False
+        self._active_replay_id: str | None = None
+        self.record_action: QAction | None = None
+        self.record_toggle_button: RecordingSwitchButton | None = None
+        self.settlement_action: QAction | None = None
+        self.battle_report_action: QAction | None = None
+        self.map_canvas.set_replay_recorder(self._replay_recorder)
 
         self.map_canvas.coordinateHovered.connect(self._update_coordinates)
         self.map_canvas.timeChanged.connect(self._update_time)
@@ -205,6 +226,15 @@ class MainWindow(QMainWindow):
         self.side_action.triggered.connect(self._toggle_active_side)
         units_action = QAction("战斗单元", self)
         units_action.triggered.connect(self._show_units_dialog)
+        self.record_action = QAction("录制", self)
+        self.record_action.setCheckable(True)
+        self.record_action.toggled.connect(self._set_recording_enabled)
+        self.settlement_action = QAction("结算", self)
+        self.settlement_action.triggered.connect(
+            lambda: self._settle_current_simulation("manual_settlement")
+        )
+        self.battle_report_action = QAction("战绩", self)
+        self.battle_report_action.triggered.connect(self._show_battle_report_dialog)
         toolbar.addAction(self.side_action)
         toolbar.addAction(units_action)
         toolbar.addSeparator()
@@ -217,7 +247,20 @@ class MainWindow(QMainWindow):
         self._style_toolbar_action(toolbar, message_action, "MessageToolButton")
         self._style_toolbar_action(toolbar, debug_action, "DebugToolButton")
         self.side_tool_button = toolbar.widgetForAction(self.side_action)
+        self._build_replay_toolbar()
         self._sync_side_buttons()
+
+    def _build_replay_toolbar(self) -> None:
+        self.addToolBarBreak(Qt.TopToolBarArea)
+        replay_toolbar = self.addToolBar("回放战绩")
+        self.record_toggle_button = RecordingSwitchButton(replay_toolbar)
+        self.record_toggle_button.toggled.connect(self._set_recording_enabled)
+        replay_toolbar.addWidget(self.record_toggle_button)
+        replay_toolbar.addAction(self.settlement_action)
+        replay_toolbar.addAction(self.battle_report_action)
+        self._style_toolbar_action(replay_toolbar, self.settlement_action, "ReplayToolButton")
+        self._style_toolbar_action(replay_toolbar, self.battle_report_action, "ReplayToolButton")
+
     @staticmethod
     def _style_toolbar_action(toolbar, action: QAction, object_name: str) -> None:
         widget = toolbar.widgetForAction(action)
@@ -816,6 +859,131 @@ class MainWindow(QMainWindow):
             self.play_action.setText("▶")
         self.map_canvas.step_simulation(1)
         self.statusBar().showMessage("单步推进 1 秒", 1000)
+
+    def _reset_replay_recorder(self) -> None:
+        self._replay_recorder = ReplayRecorder(snapshot_interval_seconds=2.5)
+        self.map_canvas.set_replay_recorder(self._replay_recorder)
+        self._active_replay_id = None
+
+    def _set_recording_enabled(self, enabled: bool) -> None:
+        self._recording_enabled = bool(enabled)
+        if self.record_action is not None and self.record_action.isChecked() != self._recording_enabled:
+            self.record_action.blockSignals(True)
+            self.record_action.setChecked(self._recording_enabled)
+            self.record_action.blockSignals(False)
+        if self.record_toggle_button is not None and self.record_toggle_button.isChecked() != self._recording_enabled:
+            self.record_toggle_button.blockSignals(True)
+            self.record_toggle_button.setChecked(self._recording_enabled)
+            self.record_toggle_button.setProperty("recording", self._recording_enabled)
+            self.record_toggle_button.update()
+            self.record_toggle_button.blockSignals(False)
+        if self._recording_enabled:
+            self._ensure_recording_session()
+            self.statusBar().showMessage("已开启录制", 2000)
+            return
+        had_active_session = self._replay_recorder.active
+        if had_active_session:
+            if self._finalize_recorded_run("manual_settlement"):
+                self.statusBar().showMessage("已关闭录制并自动结算", 2500)
+                return
+            self.statusBar().showMessage("已关闭录制，当前没有可结算会话", 2500)
+            return
+        self._reset_replay_recorder()
+        self.statusBar().showMessage("已关闭录制", 1500)
+
+    def _ensure_recording_session(self) -> None:
+        if not self._recording_enabled or self._replay_recorder.active:
+            return
+        replay_id = datetime.now().strftime("replay-%Y%m%d-%H%M%S-%f")
+        self._active_replay_id = replay_id
+        self._replay_recorder.start(
+            replay_id=replay_id,
+            scenario_name=self.scenario.name,
+            started_at=datetime.now().isoformat(timespec="seconds"),
+            initial_state=self.map_canvas.build_replay_state(),
+            initial_time=float(self.map_canvas.clock.current_time),
+        )
+
+    def _build_replay_final_state(self, state: dict) -> dict:
+        alive_by_side: dict[str, int] = {}
+        for unit in state.get("units", []):
+            side = str(unit.get("side", "unknown"))
+            alive_by_side.setdefault(side, 0)
+            if bool(unit.get("alive", False)):
+                alive_by_side[side] += 1
+        return {"alive": alive_by_side}
+
+    def _finalize_recorded_run(self, settlement_reason: str) -> bool:
+        if not self._replay_recorder.active:
+            return False
+        finished_at = datetime.now().isoformat(timespec="seconds")
+        final_snapshot_state = self.map_canvas.build_replay_state()
+        replay = self._replay_recorder.finish(
+            ended_at=finished_at,
+            duration_seconds=float(self.map_canvas.clock.current_time),
+            final_state=self._build_replay_final_state(final_snapshot_state),
+            settlement_reason=settlement_reason,
+            final_snapshot_state=final_snapshot_state,
+        )
+        replay_path = self._replay_storage.save_replay(replay)
+        summary = build_battle_report_summary(
+            scenario=self.scenario,
+            replay_id=replay.replay_id,
+            finished_at=finished_at,
+            duration_seconds=float(replay.duration_seconds),
+            settlement_reason=settlement_reason,
+            events=replay.event_stream,
+        )
+        summary.replay_path = str(replay_path.relative_to(self._replay_storage.replay_dir.parent)).replace("\\", "/")
+        self._replay_storage.save_report(summary)
+        self._battle_reports_cache = self._replay_storage.list_reports()
+        self._reset_replay_recorder()
+        if self._recording_enabled and not self.map_canvas.clock.is_finished:
+            self._ensure_recording_session()
+        self.statusBar().showMessage(f"已生成战绩：{summary.result_label}", 2500)
+        return True
+
+    def _settle_current_simulation(self, settlement_reason: str = "manual_settlement") -> None:
+        if not self._recording_enabled:
+            self.statusBar().showMessage("请先开启录制，再进行结算", 2500)
+            return
+        self._ensure_recording_session()
+        if not self._finalize_recorded_run(settlement_reason):
+            self.statusBar().showMessage("当前没有可结算的录制会话", 2500)
+
+    def _build_battle_report_dialog(self) -> BattleReportDialog:
+        return BattleReportDialog(
+            self._battle_reports_cache,
+            self._open_replay_from_report,
+            self._delete_battle_report,
+            self,
+        )
+
+    def _show_battle_report_dialog(self) -> None:
+        self._battle_reports_cache = self._replay_storage.list_reports()
+        if not self._battle_reports_cache:
+            self.statusBar().showMessage("暂无战绩记录", 2000)
+            return
+        dialog = self._build_battle_report_dialog()
+        dialog.exec_()
+
+    def _open_replay_from_report(self, report) -> None:
+        if not report.has_replay:
+            self.statusBar().showMessage("该战绩没有可用回放", 2000)
+            return
+        replay = self._replay_storage.load_replay(report.replay_id)
+        dialog = ReplayViewerDialog(replay, self)
+        dialog.exec_()
+
+    def _delete_battle_report(self, report, delete_replay: bool) -> list:
+        if delete_replay:
+            self._replay_storage.delete_report_and_replay(report.report_id, report.replay_id)
+        else:
+            self._replay_storage.delete_report_only(report.report_id)
+        self._battle_reports_cache = self._replay_storage.list_reports()
+        self.statusBar().showMessage("已更新战绩记录", 2000)
+        return self._battle_reports_cache
+
     def _set_active_side(self, side: str) -> None:
         if side not in {"blue", "red"}:
             return
@@ -856,6 +1024,18 @@ class MainWindow(QMainWindow):
     def _reload_json(self) -> None:
         self.scenario = load_scenario(self.scenario_path)
         self.map_canvas.set_scenario(self.scenario)
+        self._recording_enabled = False
+        if self.record_action is not None:
+            self.record_action.blockSignals(True)
+            self.record_action.setChecked(False)
+            self.record_action.blockSignals(False)
+        if self.record_toggle_button is not None:
+            self.record_toggle_button.blockSignals(True)
+            self.record_toggle_button.setChecked(False)
+            self.record_toggle_button.setProperty("recording", False)
+            self.record_toggle_button.update()
+            self.record_toggle_button.blockSignals(False)
+        self._reset_replay_recorder()
         self._control_page_widgets.clear()
         self.control_page_window.hide()
         self._hide_unit_popup()
@@ -1693,6 +1873,8 @@ class MainWindow(QMainWindow):
         self.time_label.setText(f"仿真时间: {self.map_canvas.clock.format_time()}")
         self.play_action.setText("⏸" if self.map_canvas.playing else "▶")
         if self.map_canvas.clock.is_finished:
+            if self._recording_enabled and self._replay_recorder.active:
+                self._finalize_recorded_run("simulation_finished")
             self.statusBar().showMessage("仿真已结束", 1500)
         self._refresh_units_dialog()
         self._update_status_counts()
@@ -1812,6 +1994,7 @@ class MainWindow(QMainWindow):
             "weapon_class": event.weapon_class,
             "message": event.message,
             "position": None if position is None else {"lon": position.lon, "lat": position.lat},
+            "extra": deepcopy(getattr(event, "extra", {})),
         }
 
     def _mark_combat_log_seen(self) -> None:
@@ -1860,6 +2043,7 @@ class MainWindow(QMainWindow):
             "shared_contact": "共享",
             "launched": "发射",
             "hit": "命中",
+            "unit_destroyed": "击毁",
             "miss": "未命中",
             "expired": "失效",
             "lost_target": "丢失目标",

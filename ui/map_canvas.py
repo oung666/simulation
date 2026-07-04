@@ -13,11 +13,11 @@ v6 不使用 WebEngine / HTML 前端，离线瓦片、红蓝航线、单位图�
 from __future__ import annotations
 
 import math
-from pathlib import Path
+from copy import deepcopy
+from typing import Any
 
-from PyQt5.QtCore import QByteArray, QPoint, QPointF, QRectF, Qt, QTimer, pyqtSignal
+from PyQt5.QtCore import QPoint, QPointF, QRectF, Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QPainter, QPainterPath, QPen, QPolygonF
-from PyQt5.QtSvg import QSvgRenderer
 from PyQt5.QtWidgets import QWidget
 
 from simulation.core.clock import SimulationClock
@@ -39,11 +39,13 @@ from simulation.core.perspective import (
     visible_units_for_view,
 )
 from simulation.core.scenario import CombatUnit, Scenario, UnitRoute
-from simulation.controllers.combat_controller import CombatController
+from simulation.controllers.combat_controller import CombatController, CombatEvent
 from simulation.controllers.motion import MotionController
 from simulation.controllers.tile_store import TileStore
 from simulation.engine.communications import build_network_links
+from simulation.replay.recorder import ReplayRecorder
 from simulation.ui.map_layers import TacticalLayerSet
+from simulation.ui.unit_icons import draw_svg_unit_icon, unit_icon_name
 
 
 DEFAULT_ZOOM = 7.0
@@ -102,7 +104,6 @@ class MapCanvas(QWidget):
         self._last_combat_event_index = 0
         self._impact_effects: list[tuple[LonLat, float, str, str, str]] = []
         self.route_drafts: dict[str, dict[str, object]] = {}
-        self._svg_cache: dict[tuple[str, str], QSvgRenderer] = {}
         self._last_mouse_pos: QPoint | None = None
         self._left_press_pos: QPoint | None = None
         self._left_dragged = False
@@ -110,6 +111,7 @@ class MapCanvas(QWidget):
         self._selected_unit_id: str | None = None
         self._interaction_mode = "none"
         self._pending_unit_id: str | None = None
+        self._replay_recorder: ReplayRecorder | None = None
         self.tactical_layers = TacticalLayerSet(self)
 
         self._timer = QTimer(self)
@@ -189,7 +191,11 @@ class MapCanvas(QWidget):
         self._impact_effects.clear()
         self._selected_unit_id = None
         self.clear_interaction_mode()
+        self._replay_recorder = None
         self.update()
+
+    def set_replay_recorder(self, recorder: ReplayRecorder | None) -> None:
+        self._replay_recorder = recorder
 
     def set_perspective(self, perspective: str) -> None:
         """Switch between god, blue, and red map perspectives."""
@@ -414,7 +420,9 @@ class MapCanvas(QWidget):
             self._last_combat_step_time += 1.0
             self._advance_units(1.0)
             self.combat_controller.step(self._current_unit_positions(), self._last_combat_step_time)
-            self._capture_new_combat_effects()
+            replay_state = self.build_replay_state() if self._replay_recorder_active() else None
+            self._capture_new_combat_effects(replay_state)
+            self._capture_replay_periodic_snapshot(replay_state)
         self._smooth_time = self.clock.fractional_time if self.clock.is_playing else self.clock.current_time
         self._impact_effects = [
             effect for effect in self._impact_effects if self._smooth_time - effect[1] <= 1.2
@@ -436,11 +444,27 @@ class MapCanvas(QWidget):
             if unit.alive:
                 self.motion_controller.advance(unit, dt_seconds)
 
-    def _capture_new_combat_effects(self) -> None:
+    def build_replay_state(self) -> dict[str, Any]:
+        return {
+            "units": [self._serialize_unit_state(unit) for unit in self.scenario.units],
+            "flying_weapons": [
+                self._serialize_flying_weapon_state(weapon)
+                for weapon in self.scenario.flying_weapons
+            ],
+            "missions": [self._serialize_mission_state(mission) for mission in self.scenario.missions],
+            "contacts": [
+                self._serialize_contact_track_state(side, track)
+                for side, tracks in self.combat_controller.contact_tracks.items()
+                for track in tracks.values()
+            ],
+        }
+
+    def _capture_new_combat_effects(self, replay_state: dict[str, Any] | None = None) -> None:
         """Convert new combat events into short-lived map effects."""
         events = self.combat_controller.get_events_since(self._last_combat_event_index)
         self._last_combat_event_index += len(events)
         changed = bool(events)
+        self._record_replay_events(events, replay_state)
         for event in events:
             if event.position is not None and event.event_type in {"hit", "miss", "expired"}:
                 self._impact_effects.append(
@@ -448,6 +472,134 @@ class MapCanvas(QWidget):
                 )
         if changed:
             self.combatEventsChanged.emit()
+
+    def _replay_recorder_active(self) -> bool:
+        return self._replay_recorder is not None and self._replay_recorder.active
+
+    def _capture_replay_periodic_snapshot(self, replay_state: dict[str, Any] | None) -> None:
+        if replay_state is None or not self._replay_recorder_active():
+            return
+        self._replay_recorder.capture_periodic_snapshot(
+            self._last_combat_step_time,
+            replay_state,
+        )
+
+    def _record_replay_events(
+        self,
+        events: list[CombatEvent],
+        replay_state: dict[str, Any] | None = None,
+    ) -> None:
+        if not events or not self._replay_recorder_active():
+            return
+        forced_snapshot_types = {"launched", "hit", "unit_destroyed"}
+        for event in events:
+            position = None
+            if event.position is not None:
+                position = {"lon": float(event.position.lon), "lat": float(event.position.lat)}
+            self._replay_recorder.record_event(
+                time=float(event.time),
+                event_type=event.event_type,
+                source_id=event.source_id,
+                target_id=event.target_id,
+                weapon_class=event.weapon_class,
+                position=position,
+                message=event.message,
+                force_snapshot_state=(
+                    replay_state if event.event_type in forced_snapshot_types else None
+                ),
+                extra=deepcopy(getattr(event, "extra", {})),
+            )
+
+    @staticmethod
+    def _serialize_lonlat(point: LonLat | None) -> dict[str, float] | None:
+        if point is None:
+            return None
+        return {"lon": float(point.lon), "lat": float(point.lat)}
+
+    def _serialize_unit_state(self, unit: CombatUnit) -> dict[str, Any]:
+        return {
+            "unit_id": unit.unit_id,
+            "name": unit.name,
+            "side": unit.side,
+            "unit_type": unit.unit_type,
+            "class_name": unit.class_name,
+            "alive": unit.alive,
+            "position": self._serialize_lonlat(self._position_for_unit(unit)),
+            "heading": float(unit.heading),
+            "speed": float(unit.speed),
+            "target_id": unit.target_id,
+            "range_nm": float(unit.range_nm),
+            "detection_range_nm": float(unit.detection_range_nm),
+            "radar_on": bool(unit.radar_on),
+            "jammer_power": float(unit.jammer_power),
+            "jammer_range_nm": float(unit.jammer_range_nm),
+            "comms_on": bool(unit.comms_on),
+            "comms_range_nm": float(unit.comms_range_nm),
+            "comms_power": float(unit.comms_power),
+            "comms_resistance": float(unit.comms_resistance),
+            "current_fuel": float(unit.current_fuel),
+            "motion": unit.motion,
+            "route_id": unit.route_id,
+            "route": [self._serialize_lonlat(point) for point in unit.route.points],
+            "weapons": [
+                {
+                    "weapon_class": weapon.weapon_class,
+                    "name": weapon.name,
+                    "current_quantity": int(weapon.current_quantity),
+                    "max_quantity": int(weapon.max_quantity),
+                }
+                for weapon in unit.weapons
+            ],
+        }
+
+    def _serialize_flying_weapon_state(self, weapon) -> dict[str, Any]:
+        return {
+            "weapon_id": weapon.weapon_id,
+            "name": weapon.name,
+            "side": weapon.side,
+            "weapon_class": weapon.weapon_class,
+            "position": self._serialize_lonlat(weapon.position),
+            "heading": float(weapon.heading),
+            "speed": float(weapon.speed),
+            "target_id": weapon.target_id,
+            "lethality": float(weapon.lethality),
+            "fuel_remaining_s": float(weapon.fuel_remaining_s),
+            "trail": [self._serialize_lonlat(point) for point in weapon.trail],
+            "attacker_unit_id": str(getattr(weapon, "attacker_unit_id", "")),
+        }
+
+    def _serialize_mission_state(self, mission) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "mission_id": mission.mission_id,
+            "name": mission.name,
+            "mission_type": mission.mission_type,
+            "active": bool(mission.active),
+            "assigned_unit_ids": list(mission.assigned_unit_ids),
+        }
+        if hasattr(mission, "assigned_target_ids"):
+            payload["assigned_target_ids"] = list(getattr(mission, "assigned_target_ids", []))
+        if isinstance(mission, PatrolMission):
+            payload["assigned_area"] = [
+                {
+                    "reference_id": point.reference_id,
+                    "name": point.name,
+                    "position": self._serialize_lonlat(point.position),
+                }
+                for point in mission.assigned_area
+            ]
+        return payload
+
+    def _serialize_contact_track_state(self, side: str, track: ContactTrack) -> dict[str, Any]:
+        return {
+            "side": side,
+            "target_id": track.target_id,
+            "last_known_position": self._serialize_lonlat(track.last_known_position),
+            "last_detected_time": float(track.last_detected_time),
+            "source_unit_id": track.source_unit_id,
+            "confidence": float(track.confidence),
+            "track_type": track.track_type,
+            "shared": bool(track.shared),
+        }
 
     def _screen_from_lonlat(self, point: LonLat) -> QPointF:
         """把经纬度坐标转换成当前窗口里的屏幕坐标。"""
@@ -1058,8 +1210,6 @@ class MapCanvas(QWidget):
                 painter.setBrush(Qt.NoBrush)
                 painter.setPen(QPen(QColor("#facc15"), 3.0))
                 painter.drawEllipse(screen, 22.0, 22.0)
-                painter.setPen(QPen(QColor(255, 255, 255, 210), 1.4))
-                painter.drawEllipse(screen, 27.0, 27.0)
             painter.setBrush(color)
             painter.setPen(QPen(QColor("#ffffff"), 2))
             self._draw_unit_symbol(painter, unit, screen, color)
@@ -1203,13 +1353,8 @@ class MapCanvas(QWidget):
     def _draw_unit_symbol(self, painter: QPainter, unit: CombatUnit, screen: QPointF, color: QColor) -> None:
         """根据单位类型绘制对应图标；优先使用 assets/svg 下的 SVG。"""
         heading = unit.heading if unit.unit_type == "aircraft" else 0.0
-        
-        icon_name = {
-            "aircraft": "flight_black_24dp.svg",
-            "ship": "directions_boat_black_24dp.svg",
-            "facility": "radar_black_24dp.svg",
-            "airbase": "flight_takeoff_black_24dp.svg",
-        }.get(unit.unit_type)
+
+        icon_name = self._unit_icon_name(unit)
         if icon_name:
             self._draw_svg_unit_icon(painter, icon_name, screen, color, heading)
             return
@@ -1270,39 +1415,12 @@ class MapCanvas(QWidget):
         painter.drawPolygon(points)
         painter.restore()
 
+    def _unit_icon_name(self, unit: CombatUnit) -> str | None:
+        return unit_icon_name(unit)
+
     def _draw_svg_unit_icon(self, painter: QPainter, icon_name: str, screen: QPointF, color: QColor, heading: float) -> None:
         """绘制 SVG 单位图标。"""
-        renderer = self._svg_renderer(icon_name, color)
-        if renderer is None:
-            return
-
-        size = 28.0
-        painter.save()
-        painter.translate(screen)
-        painter.rotate(heading)
-
-        renderer.render(
-            painter,
-            QRectF(-size / 2.0, -size / 2.0, size, size),
-        )
-        painter.restore()
-
-    def _svg_renderer(self, icon_name: str, color: QColor) -> QSvgRenderer | None:
-        """读取 SVG 文件，把白色替换成红/蓝阵营色，并缓存渲染器。"""
-        color_name = color.name()
-        key = (icon_name, color_name)
-        if key in self._svg_cache:
-            return self._svg_cache[key]
-
-        icon_path = Path(__file__).resolve().parents[1] / "assets" / "svg" / icon_name
-        if not icon_path.exists():
-            return None
-        svg_text = icon_path.read_text(encoding="utf-8").replace("#ffffff", color_name)
-        renderer = QSvgRenderer(QByteArray(svg_text.encode("utf-8")))
-        if not renderer.isValid():
-            return None
-        self._svg_cache[key] = renderer
-        return renderer
+        draw_svg_unit_icon(painter, icon_name, screen, color, heading)
 
     def _draw_overlay(self, painter: QPainter) -> None:
         """绘制左上角地图状态文字，例如当前 zoom 和瓦片来源。"""

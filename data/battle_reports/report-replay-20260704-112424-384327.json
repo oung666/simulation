@@ -1,0 +1,184 @@
+{
+  "report_id": "report-replay-20260704-112424-384327",
+  "replay_id": "replay-20260704-112424-384327",
+  "scenario_name": "Taiwan-Fujian Demo Scenario",
+  "finished_at": "2026-07-04T11:24:27",
+  "settlement_reason": "manual_settlement",
+  "winner_side": "draw",
+  "result_label": "平局",
+  "duration_seconds": 2.0,
+  "replay_path": "replays/replay-20260704-112424-384327.json",
+  "has_replay": true,
+  "side_summary": {
+    "red": {
+      "alive_count": 3,
+      "lost_count": 1,
+      "launch_count": 0,
+      "hit_count": 0,
+      "kill_count": 0
+    },
+    "blue": {
+      "alive_count": 3,
+      "lost_count": 2,
+      "launch_count": 0,
+      "hit_count": 0,
+      "kill_count": 0
+    }
+  },
+  "unit_rows": [
+    {
+      "unit_id": "blue-ship-01",
+      "name": "蓝方舰艇-01",
+      "side": "blue",
+      "unit_type": "ship",
+      "class_name": "Destroyer",
+      "alive": false,
+      "kills": 0,
+      "destroyed": true,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 119.47206710831335,
+        "lat": 23.772931941994294
+      },
+      "final_mission_status": "destroyed"
+    },
+    {
+      "unit_id": "blue-ship-02",
+      "name": "蓝方舰艇-02",
+      "side": "blue",
+      "unit_type": "ship",
+      "class_name": "Destroyer",
+      "alive": true,
+      "kills": 0,
+      "destroyed": false,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 119.01218139865739,
+        "lat": 21.018867173845532
+      },
+      "final_mission_status": "active"
+    },
+    {
+      "unit_id": "blue-air-01",
+      "name": "蓝方巡逻机-01",
+      "side": "blue",
+      "unit_type": "aircraft",
+      "class_name": "F-35A Lightning II",
+      "alive": true,
+      "kills": 0,
+      "destroyed": false,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 121.53817887038724,
+        "lat": 21.639747524587527
+      },
+      "final_mission_status": "active"
+    },
+    {
+      "unit_id": "red-air-01",
+      "name": "红方飞机-01",
+      "side": "red",
+      "unit_type": "aircraft",
+      "class_name": "F-35A Lightning II",
+      "alive": true,
+      "kills": 0,
+      "destroyed": false,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 120.6758255762162,
+        "lat": 23.151930908470717
+      },
+      "final_mission_status": "active"
+    },
+    {
+      "unit_id": "red-air-02",
+      "name": "红方飞机-02",
+      "side": "red",
+      "unit_type": "aircraft",
+      "class_name": "F-35A Lightning II",
+      "alive": false,
+      "kills": 0,
+      "destroyed": true,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 119.52628838912676,
+        "lat": 24.550000444619588
+      },
+      "final_mission_status": "destroyed"
+    },
+    {
+      "unit_id": "blue-airbase-01",
+      "name": "蓝方机场",
+      "side": "blue",
+      "unit_type": "airbase",
+      "class_name": "蓝方机场",
+      "alive": true,
+      "kills": 0,
+      "destroyed": false,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 121.2,
+        "lat": 24.7
+      },
+      "final_mission_status": "active"
+    },
+    {
+      "unit_id": "red-radar-01",
+      "name": "红方雷达阵地",
+      "side": "red",
+      "unit_type": "facility",
+      "class_name": "HQ-9",
+      "alive": true,
+      "kills": 0,
+      "destroyed": false,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 119.3,
+        "lat": 26.08
+      },
+      "final_mission_status": "active"
+    },
+    {
+      "unit_id": "blue-himars-01",
+      "name": "Blue HIMARS-01",
+      "side": "blue",
+      "unit_type": "ground_vehicle",
+      "class_name": "HIMARS",
+      "alive": false,
+      "kills": 0,
+      "destroyed": true,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 120.96,
+        "lat": 24.76
+      },
+      "final_mission_status": "destroyed"
+    },
+    {
+      "unit_id": "red-df16-tel-01",
+      "name": "Red DF-16 TEL-01",
+      "side": "red",
+      "unit_type": "ground_vehicle",
+      "class_name": "DF-16 TEL",
+      "alive": true,
+      "kills": 0,
+      "destroyed": false,
+      "launches": 0,
+      "hits": 0,
+      "last_position": {
+        "lon": 119.31,
+        "lat": 26.02
+      },
+      "final_mission_status": "active"
+    }
+  ],
+  "highlights": []
+}
